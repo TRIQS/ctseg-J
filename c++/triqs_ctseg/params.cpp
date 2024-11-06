@@ -51,6 +51,8 @@ namespace triqs_ctseg {
     h5_write(grp, "h_loc0", c.h_loc0);
     h5_write(grp, "n_tau_G", c.n_tau_G);
     h5_write(grp, "n_tau_chi2", c.n_tau_chi2);
+    h5_write(grp, "n_iw_chi4_b", c.n_iw_chi4_b);
+    h5_write(grp, "n_iw_chi4_f", c.n_iw_chi4_f);
     h5_write(grp, "n_cycles", c.n_cycles);
     h5_write(grp, "length_cycle", c.length_cycle);
     h5_write(grp, "n_warmup_cycles", c.n_warmup_cycles);
@@ -77,6 +79,8 @@ namespace triqs_ctseg {
     h5_write(grp, "measure_nn_tau", c.measure_nn_tau);
     h5_write(grp, "measure_Sperp_tau", c.measure_Sperp_tau);
     h5_write(grp, "measure_state_hist", c.measure_state_hist);
+    h5_write(grp, "measure_g3w", c.measure_g3w);
+    h5_write(grp, "measure_f3w", c.measure_f3w);
     h5_write(grp, "det_init_size", c.det_init_size);
     h5_write(grp, "det_n_operations_before_check", c.det_n_operations_before_check);
     h5_write(grp, "det_precision_warning", c.det_precision_warning);
@@ -121,6 +125,8 @@ namespace triqs_ctseg {
     h5_read(grp, "measure_nn_tau", c.measure_nn_tau);
     h5_read(grp, "measure_Sperp_tau", c.measure_Sperp_tau);
     h5_read(grp, "measure_state_hist", c.measure_state_hist);
+    h5_read(grp, "measure_g3w", c.measure_g3w);
+    h5_read(grp, "measure_f3w", c.measure_f3w);
     h5_read(grp, "det_init_size", c.det_init_size);
     h5_read(grp, "det_n_operations_before_check", c.det_n_operations_before_check);
     h5_read(grp, "det_precision_warning", c.det_precision_warning);

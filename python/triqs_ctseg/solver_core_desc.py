@@ -91,6 +91,16 @@ c.add_member(c_name = "state_hist",
              read_only= True,
              doc = r"""State histogram""")
 
+c.add_member(c_name = "g3w",
+             c_type = "std::optional<block_gf<prod<imfreq, imfreq, imfreq>, tensor_valued<4>>>",
+             read_only= True,
+             doc = r"""Four-point correlation function""")
+
+c.add_member(c_name = "f3w",
+             c_type = "std::optional<block_gf<prod<imfreq, imfreq, imfreq>, tensor_valued<4>>>",
+             read_only= True,
+             doc = r"""Four-point correlation function improved estimator""")
+
 c.add_member(c_name = "average_sign",
              c_type = "double",
              read_only= True,
@@ -393,6 +403,16 @@ c.add_member(c_name = "measure_state_hist",
              c_type = "bool",
              initializer = """ false """,
              doc = r"""Whether to measure state histograms (see measures/state_hist)""")
+
+c.add_member(c_name = "measure_g3w",
+             c_type = "bool",
+             initializer = """ false """,
+             doc = r"""Whether to measure four-point correlation function (see measures/four_point)""")
+
+c.add_member(c_name = "measure_f3w",
+             c_type = "bool",
+             initializer = """ false """,
+             doc = r"""Whether to measure four-point correlation function improved estimator (see measures/four_point)""")
 
 c.add_member(c_name = "det_init_size",
              c_type = "int",
