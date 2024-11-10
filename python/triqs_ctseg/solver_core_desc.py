@@ -274,6 +274,16 @@ c.add_member(c_name = "n_tau_chi2",
              initializer = """ 0 """,
              doc = r"""Number of points on which to measure 2-point functions (defaults to n_tau_bosonic)""")
 
+c.add_member(c_name = "n_iw_chi4_b",
+             c_type = "int",
+             initializer = """ 1001 """,
+             doc = r"""Number of bosonic M-frequency points on which to measure 4-point functions""")
+
+c.add_member(c_name = "n_iw_chi4_f",
+             c_type = "int",
+             initializer = """ 1000 """,
+             doc = r"""Number of fermionic M-frequency points on which to measure 4-point functions""")
+
 c.add_member(c_name = "n_cycles",
              c_type = "int",
              initializer = """  """,

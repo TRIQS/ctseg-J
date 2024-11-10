@@ -29,8 +29,8 @@ namespace triqs_ctseg::measures {
 
     auto g3w_vec = [&]() {
       std::vector<gf<prod<imfreq, imfreq, imfreq>, tensor_valued<4>>> green_v;
-      for (auto const &[bl1_name, bl1_size] : p.gf_struct)
-        for (auto const &[bl2_name, bl2_size] : p.gf_struct)
+      for (auto const &[bl1_name, bl1_size] : wdata.gf_struct)
+        for (auto const &[bl2_name, bl2_size] : wdata.gf_struct)
           green_v.emplace_back(gf<prod<imfreq, imfreq, imfreq>, tensor_valued<4>>(
               {{beta, Fermion, p.n_iw_chi4_f, imfreq::option::all_frequencies},
                {beta, Fermion, p.n_iw_chi4_f, imfreq::option::all_frequencies},
@@ -40,7 +40,7 @@ namespace triqs_ctseg::measures {
     };
 
     std::vector<std::string> block_names;
-    for (auto const &[bl_name, bl_size] : p.gf_struct) block_names.push_back(bl_name);
+    for (auto const &[bl_name, bl_size] : wdata.gf_struct) block_names.push_back(bl_name);
     auto bosonic_block_names = std::vector<std::string>{};
     for (auto const &str1 : block_names)
       for (auto const &str2 : block_names)
@@ -48,21 +48,17 @@ namespace triqs_ctseg::measures {
 
     g3w = make_block_gf<prod<imfreq, imfreq, imfreq>, tensor_valued<4>>(bosonic_block_names, g3w_vec());
     f3w = make_block_gf<prod<imfreq, imfreq, imfreq>, tensor_valued<4>>(bosonic_block_names, g3w_vec());
-    
-    for (auto &g : g3w)
-      g() = 0;
-    for (auto &f : f3w)
-      f() = 0;
 
     LOG("\n ====================== COMPUTING M-MATRIX  ====================== \n");
-    if (measure_g3w) Mw_vector = compute_Mw(false);
-    if (measure_f3w) nMw_vector = compute_Mw(true);
 
     n_w_fermionic = std::get<0>(g3w[0].mesh().components()).last_index() + 1;
     n_w_bosonic   = std::get<2>(g3w[0].mesh().components()).last_index() + 1;
 
     w_ini = (2 * (-n_w_fermionic) + 1) * M_PI / beta;
     w_inc = 2 * M_PI / beta;
+
+    Mw_vector = compute_Mw(false);
+    if (measure_f3w) nMw_vector = compute_Mw(true);
 
   }
 
@@ -106,7 +102,7 @@ namespace triqs_ctseg::measures {
                     for (int m = 0; m < n_w_bosonic; m++) {
                       int n2 = n1 + m;
                       int n3 = n4 + m;
-                      g3w[bl](n1, n4, m)(a, b, c, d) += s * Mw(b1, a, b, n1, n2) * Mw(b2, c, d, n3, n4);
+                      g3w[bl](n1, n4, m)(a, b, c, d) = s * Mw(b1, a, b, n1, n2) * Mw(b2, c, d, n3, n4);
                       if (b1 == b2)
                         g3w[bl](n1, n4, m)(a, b, c, d) -= s * Mw(b1, a, d, n1, n4) * Mw(b2, c, b, n3, n2);
                     } // m
@@ -132,7 +128,7 @@ namespace triqs_ctseg::measures {
                     for (int m = 0; m < n_w_bosonic; m++) {
                       int n2 = n1 + m;
                       int n3 = n4 + m;
-                      f3w[bl](n1, n4, m)(a, b, c, d) += s * nMw(b1, a, b, n1, n2) * Mw(b2, c, d, n3, n4);
+                      f3w[bl](n1, n4, m)(a, b, c, d) = s * nMw(b1, a, b, n1, n2) * Mw(b2, c, d, n3, n4);
                       if (b1 == b2)
                         f3w[bl](n1, n4, m)(a, b, c, d) -= s * nMw(b1, a, d, n1, n4) * Mw(b2, c, b, n3, n2);
                     } // m
@@ -143,7 +139,7 @@ namespace triqs_ctseg::measures {
           } // b
         } // a
       } // bl
-    }
+    } // measure_f3w
     
   }
 
@@ -169,6 +165,7 @@ namespace triqs_ctseg::measures {
 
   double four_point::fprefactor(long const &block, std::pair<tau_t, long> const &y) {
 
+    // Copied from G_F_tau.cpp
     int color    = wdata.block_to_color(block, y.second);
     double I_tau = 0;
     for (auto const &[c, sl] : itertools::enumerate(config.seglists)) {
@@ -189,9 +186,10 @@ namespace triqs_ctseg::measures {
 
   // -------------------------------------
 
-  vector<array<dcomplex, 4>> four_point::compute_Mw(bool is_nMw) {
+  std::vector<array<dcomplex, 4>> four_point::compute_Mw(bool is_nMw) {
+
     int n_w_aux = 2 * n_w_fermionic + n_w_bosonic > 1 ? 2 * n_w_fermionic + n_w_bosonic - 1 : 0;
-    vector<array<dcomplex, 4>> result;
+    std::vector<array<dcomplex, 4>> result;
     result.resize(wdata.gf_struct.size());
 
     for (auto const &[bl, bl_pair] : itertools::enumerate(wdata.gf_struct)) {
@@ -241,8 +239,8 @@ namespace triqs_ctseg::measures {
         }
       }
     }
-
     return result;
+
   }
 
 } // namespace triqs_ctseg::measures

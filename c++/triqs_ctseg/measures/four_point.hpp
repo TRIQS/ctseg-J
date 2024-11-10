@@ -33,8 +33,7 @@ namespace triqs_ctseg::measures {
     bool measure_f3w;
     int n_w_fermionic;
     int n_w_bosonic;
-    vector<array<dcomplex, 4>> Mw_vector;
-    vector<array<dcomplex, 4>> nMw_vector;
+    std::vector<array<dcomplex, 4>> Mw_vector, nMw_vector;
     vector<dcomplex> y_exp_ini, y_exp_inc, x_exp_ini, x_exp_inc;
     vector<int> y_inner_index, x_inner_index;
 
@@ -49,7 +48,7 @@ namespace triqs_ctseg::measures {
     void collect_results(mpi::communicator const &c);
     double fprefactor(long const &block, std::pair<tau_t, long> const &y);
     
-    vector<array<dcomplex, 4>> compute_Mw(bool is_nMw);
+    std::vector<array<dcomplex, 4>> compute_Mw(bool is_nMw);
 
     dcomplex Mw(long const &block, int const &i, int const &j, int const &n1, int const &n2) {
       return Mw_vector[block](i, j, n1 + n_w_fermionic, n2 + n_w_fermionic);
