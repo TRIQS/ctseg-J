@@ -51,8 +51,8 @@ namespace triqs_ctseg {
     h5_write(grp, "h_loc0", c.h_loc0);
     h5_write(grp, "n_tau_G", c.n_tau_G);
     h5_write(grp, "n_tau_chi2", c.n_tau_chi2);
-    h5_write(grp, "n_iw_chi4_b", c.n_iw_chi4_b);
-    h5_write(grp, "n_iw_chi4_f", c.n_iw_chi4_f);
+    h5_write(grp, "n_w_b_vertex", c.n_w_b_vertex);
+    h5_write(grp, "n_w_f_vertex", c.n_w_f_vertex);
     h5_write(grp, "n_cycles", c.n_cycles);
     h5_write(grp, "length_cycle", c.length_cycle);
     h5_write(grp, "n_warmup_cycles", c.n_warmup_cycles);

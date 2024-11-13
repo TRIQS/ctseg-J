@@ -168,6 +168,10 @@ c.add_method("""void solve (**solve_params_t)""",
 +-------------------------------+--------------------------------------+-----------------------------------------+-------------------------------------------------------------------------------------------------------------------+
 | n_tau_chi2                    | int                                  | 0                                       | Number of points on which to measure 2-point functions (defaults to n_tau_bosonic)                                |
 +-------------------------------+--------------------------------------+-----------------------------------------+-------------------------------------------------------------------------------------------------------------------+
+| n_w_b_vertex                  | int                                  | 10                                      | Number of bosonic M-frequency points on which to measure vertex functions                                         |
++-------------------------------+--------------------------------------+-----------------------------------------+-------------------------------------------------------------------------------------------------------------------+
+| n_w_f_vertex                  | int                                  | 10                                      | Number of fermionic M-frequency points on which to measure vertex functions                                       |
++-------------------------------+--------------------------------------+-----------------------------------------+-------------------------------------------------------------------------------------------------------------------+
 | n_cycles                      | int                                  | --                                      | Number of QMC cycles                                                                                              |
 +-------------------------------+--------------------------------------+-----------------------------------------+-------------------------------------------------------------------------------------------------------------------+
 | length_cycle                  | int                                  | 50                                      | Length of a single QMC cycle                                                                                      |
@@ -219,6 +223,10 @@ c.add_method("""void solve (**solve_params_t)""",
 | measure_Sperp_tau             | bool                                 | false                                   | Whether to measure <S_x(tau)S_x(0)> (see measures/Sperp_tau)                                                      |
 +-------------------------------+--------------------------------------+-----------------------------------------+-------------------------------------------------------------------------------------------------------------------+
 | measure_state_hist            | bool                                 | false                                   | Whether to measure state histograms (see measures/state_hist)                                                     |
++-------------------------------+--------------------------------------+-----------------------------------------+-------------------------------------------------------------------------------------------------------------------+
+| measure_g3w                   | bool                                 | false                                   | Whether to measure four-point correlation function (see measures/four_point)                                      |
++-------------------------------+--------------------------------------+-----------------------------------------+-------------------------------------------------------------------------------------------------------------------+
+| measure_f3w                   | bool                                 | false                                   | Whether to measure four-point correlation function improved estimator (see measures/four_point)                   |
 +-------------------------------+--------------------------------------+-----------------------------------------+-------------------------------------------------------------------------------------------------------------------+
 | det_init_size                 | int                                  | 100                                     | The maximum size of the determinant matrix before a resize                                                        |
 +-------------------------------+--------------------------------------+-----------------------------------------+-------------------------------------------------------------------------------------------------------------------+
@@ -274,15 +282,15 @@ c.add_member(c_name = "n_tau_chi2",
              initializer = """ 0 """,
              doc = r"""Number of points on which to measure 2-point functions (defaults to n_tau_bosonic)""")
 
-c.add_member(c_name = "n_iw_chi4_b",
+c.add_member(c_name = "n_w_b_vertex",
              c_type = "int",
-             initializer = """ 1001 """,
-             doc = r"""Number of bosonic M-frequency points on which to measure 4-point functions""")
+             initializer = """ 10 """,
+             doc = r"""Number of bosonic M-frequency points on which to measure vertex functions""")
 
-c.add_member(c_name = "n_iw_chi4_f",
+c.add_member(c_name = "n_w_f_vertex",
              c_type = "int",
-             initializer = """ 1000 """,
-             doc = r"""Number of fermionic M-frequency points on which to measure 4-point functions""")
+             initializer = """ 10 """,
+             doc = r"""Number of fermionic M-frequency points on which to measure vertex functions""")
 
 c.add_member(c_name = "n_cycles",
              c_type = "int",

@@ -57,11 +57,11 @@ namespace triqs_ctseg {
     /// Number of points on which to measure 2-point functions (defaults to n_tau_bosonic)
     int n_tau_chi2 = 0;
 
-    /// Number of bosonic M-frequency points on which to measure 4-point functions
-    int n_iw_chi4_b = 1001;
+    /// Number of bosonic M-frequency points on which to measure vertex functions
+    int n_w_b_vertex = 10;
 
-    /// Number of fermionic M-frequency points on which to measure 4-point functions
-    int n_iw_chi4_f = 1000;
+    /// Number of fermionic M-frequency points on which to measure vertex functions
+    int n_w_f_vertex = 10;
 
     /// Number of QMC cycles
     int n_cycles;
