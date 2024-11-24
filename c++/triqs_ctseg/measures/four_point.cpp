@@ -23,9 +23,9 @@ namespace triqs_ctseg::measures {
   four_point::four_point(params_t const &p, work_data_t const &wdata, configuration_t const &config, results_t &results)
      : wdata{wdata}, config{config}, results{results} {
 
-    beta        = p.beta;
-    measure_g3w = p.measure_g3w;
-    measure_f3w = p.measure_f3w;
+    beta           = p.beta;
+    measure_g3w    = p.measure_g3w;
+    measure_f3w    = p.measure_f3w;
 
     auto g3w_vec = [&]() {
       std::vector<gf<prod<imfreq, imfreq, imfreq>, tensor_valued<4>>> green_v;
@@ -39,7 +39,6 @@ namespace triqs_ctseg::measures {
       return green_v;
     };
 
-    std::vector<std::string> block_names;
     for (auto const &[bl_name, bl_size] : wdata.gf_struct) block_names.push_back(bl_name);
     auto bosonic_block_names = std::vector<std::string>{};
     for (auto const &str1 : block_names)
@@ -162,12 +161,31 @@ namespace triqs_ctseg::measures {
     if (measure_g3w) {
       g3w = mpi::all_reduce(g3w, c);
       g3w = g3w / (Z * beta);
-      results.g3w = std::move(g3w);
+
+      std::vector<std::vector<gf<prod<imfreq, imfreq, imfreq>, tensor_valued<4>>>> g3w_vec(wdata.gf_struct.size(), std::vector<gf<prod<imfreq, imfreq, imfreq>, tensor_valued<4>>>(wdata.gf_struct.size()));
+      for (int b1 : range(wdata.gf_struct.size())) {
+        for (int b2 : range(wdata.gf_struct.size())) {
+          g3w_vec[b1][b2] = g3w[b1 * wdata.gf_struct.size() + b2];
+        }
+      }
+
+      auto g3w_block = make_block2_gf(block_names, block_names, g3w_vec);
+      results.g3w = std::move(g3w_block);
     }
+
     if (measure_f3w) {
       f3w = mpi::all_reduce(f3w, c);
       f3w = f3w / (Z * beta);
-      results.f3w = std::move(f3w);
+
+      std::vector<std::vector<gf<prod<imfreq, imfreq, imfreq>, tensor_valued<4>>>> f3w_vec(wdata.gf_struct.size(), std::vector<gf<prod<imfreq, imfreq, imfreq>, tensor_valued<4>>>(wdata.gf_struct.size()));
+      for (int b1 : range(wdata.gf_struct.size())) {
+        for (int b2 : range(wdata.gf_struct.size())) {
+          f3w_vec[b1][b2] = f3w[b1 * wdata.gf_struct.size() + b2];
+        }
+      }
+
+      auto f3w_block = make_block2_gf(block_names, block_names, f3w_vec);
+      results.f3w = std::move(f3w_block);
     }
 
   }
