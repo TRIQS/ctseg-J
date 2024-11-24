@@ -92,12 +92,12 @@ c.add_member(c_name = "state_hist",
              doc = r"""State histogram""")
 
 c.add_member(c_name = "g3w",
-             c_type = "std::optional<block_gf<prod<imfreq, imfreq, imfreq>, tensor_valued<4>>>",
+             c_type = "std::optional<block2_gf<prod<imfreq, imfreq, imfreq>, tensor_valued<4>>>",
              read_only= True,
              doc = r"""Four-point correlation function""")
 
 c.add_member(c_name = "f3w",
-             c_type = "std::optional<block_gf<prod<imfreq, imfreq, imfreq>, tensor_valued<4>>>",
+             c_type = "std::optional<block2_gf<prod<imfreq, imfreq, imfreq>, tensor_valued<4>>>",
              read_only= True,
              doc = r"""Four-point correlation function improved estimator""")
 
