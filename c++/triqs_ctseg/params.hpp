@@ -57,6 +57,12 @@ namespace triqs_ctseg {
     /// Number of points on which to measure 2-point functions (defaults to n_tau_bosonic)
     int n_tau_chi2 = 0;
 
+    /// Number of bosonic M-frequency points on which to measure vertex functions
+    int n_w_b_vertex = 10;
+
+    /// Number of fermionic M-frequency points on which to measure vertex functions
+    int n_w_f_vertex = 10;
+
     /// Number of QMC cycles
     int n_cycles;
 
@@ -138,6 +144,12 @@ namespace triqs_ctseg {
 
     /// Whether to measure state histograms (see measures/state_hist)
     bool measure_state_hist = false;
+
+    /// Whether to measure four-point correlation function (see measures/four_point)
+    bool measure_g3w = false;
+
+    /// Whether to measure four-point correlation function improved estimator (see measures/four_point)
+    bool measure_f3w = false;
 
     // -------- Misc parameters --------------
 

@@ -35,6 +35,8 @@ namespace triqs_ctseg {
     h5_write(grp, "pert_order_Jperp", c.pert_order_Jperp);
     h5_write(grp, "average_order_Jperp", c.average_order_Jperp);
     h5_write(grp, "state_hist", c.state_hist);
+    h5_write(grp, "g3w", c.g3w);
+    h5_write(grp, "f3w", c.f3w);
   }
 
   //------------------------------------
@@ -55,6 +57,8 @@ namespace triqs_ctseg {
     h5_read(grp, "pert_order_Jperp", c.pert_order_Jperp);
     h5_read(grp, "average_order_Jperp", c.average_order_Jperp);
     h5_read(grp, "state_hist", c.state_hist);
+    h5_read(grp, "g3w", c.g3w);
+    h5_read(grp, "f3w", c.f3w);
   }
 
 } // namespace triqs_ctseg
