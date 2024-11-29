@@ -61,10 +61,9 @@ around an exactly solvable limit. Continuous time hybridization expansion algori
 Currently, there exist implementations of `CTHYB` within three different libraries: `ALPS` [@ALPS2018], `w2dynamics` [@w2dynamics2019] and `TRIQS` [@CTHYB2016].
 
 However, a simpler and potentially faster version of the `CTHYB` algorithm, 
-called `CTSEG`, can be used under the restriction of (possibly time-dependent) density-density
-interactions on the impurity. `CTSEG` can be further generalized to allow for time-dependent 
-spin-spin interactions [@otsuki2013]. To our knowledge, there exists so far one published implementation of `CTSEG` based on ALPS [@ALPS-CTSEG], but it does not allow for spin-spin 
-interactions. 
+called `CTSEG`, can be used under the restriction of density-density
+interactions on the impurity[@werner2006a,@werner2006b,@haule2007]. `CTSEG` can be further generalized to allow for time-dependent[@werner2007,@werner2010] and 
+spin-spin interactions [@otsuki2013,@steiner2015]: see [@werner2016] for a review. To our knowledge, there exists so far one published implementation of `CTSEG` based on ALPS [@ALPS-CTSEG], but it does not allow for spin-spin interactions. 
 
 Our `CTSEG` solver is about twice as fast as `TRIQS-CTHYB` for a single orbital problem, and has
 better scaling with the number of orbitals (40 times faster in our 5 orbital test case, see Fig. 1a). 
