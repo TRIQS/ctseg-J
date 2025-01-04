@@ -32,9 +32,9 @@ namespace triqs_ctseg::measures {
       for (auto const &[bl1_name, bl1_size] : wdata.gf_struct)
         for (auto const &[bl2_name, bl2_size] : wdata.gf_struct)
           green_v.emplace_back(gf<prod<imfreq, imfreq, imfreq>, tensor_valued<4>>(
-              {{beta, Fermion, p.n_w_f_vertex, imfreq::option::all_frequencies},
+              {{beta, Boson,   p.n_w_b_vertex, imfreq::option::all_frequencies},
                {beta, Fermion, p.n_w_f_vertex, imfreq::option::all_frequencies},
-               {beta, Boson,   p.n_w_b_vertex, imfreq::option::positive_frequencies_only}},
+               {beta, Fermion, p.n_w_f_vertex, imfreq::option::all_frequencies}},
               make_shape(bl1_size, bl1_size, bl2_size, bl2_size)));
       return green_v;
     };
@@ -50,10 +50,10 @@ namespace triqs_ctseg::measures {
     g3w() = 0;
     f3w() = 0;
 
-    n_w_fermionic = std::get<0>(g3w[0].mesh().components()).last_index() + 1;
-    n_w_bosonic   = std::get<2>(g3w[0].mesh().components()).last_index() + 1;
+    n_w_fermionic = std::get<1>(g3w[0].mesh().components()).last_index() + 1;
+    n_w_bosonic   = std::get<0>(g3w[0].mesh().components()).last_index() + 1;
 
-    w_ini = (2 * (-n_w_fermionic) + 1) * M_PI / beta;
+    w_ini = (2 * (- n_w_fermionic - n_w_bosonic + 1) + 1) * M_PI / beta;
     w_inc = 2 * M_PI / beta;
 
   }
@@ -85,8 +85,8 @@ namespace triqs_ctseg::measures {
 
     Z += s;
 
-    auto const mesh_fermionic = std::get<0>(g3w[0].mesh());
-    auto const mesh_bosonic   = std::get<2>(g3w[0].mesh());
+    auto const mesh_fermionic = std::get<1>(g3w[0].mesh());
+    auto const mesh_bosonic   = std::get<0>(g3w[0].mesh());
 
     Mw_vector = compute_Mw(false);
 
@@ -100,16 +100,16 @@ namespace triqs_ctseg::measures {
               for (int d = 0; d < g3w[bl].target_shape()[3]; d++) {
                 for (int n1 = -n_w_fermionic; n1 < n_w_fermionic; n1++) {
                   for (int n4 = -n_w_fermionic; n4 < n_w_fermionic; n4++) {
-                    for (int m = 0; m < n_w_bosonic; m++) {
+                    for (int m = -n_w_bosonic + 1; m < n_w_bosonic; m++) {
                       int n2 = n1 + m;
                       int n3 = n4 + m;
                       // This structure is ugly. Need someone who familiar with TRIQS to prune this part.
                       auto freq_1 = mesh_fermionic[n1 + n_w_fermionic];
                       auto freq_2 = mesh_fermionic[n4 + n_w_fermionic];
-                      auto freq_3 = mesh_bosonic[m];
-                      g3w[bl][freq_1, freq_2, freq_3](a, b, c, d) += s * Mw(b1, a, b, n1, n2) * Mw(b2, c, d, n3, n4);
+                      auto freq_3 = mesh_bosonic[m + n_w_bosonic - 1];
+                      g3w[bl][freq_3, freq_1, freq_2](a, b, c, d) += s * Mw(b1, a, b, n1, n2) * Mw(b2, c, d, n3, n4);
                       if (b1 == b2)
-                        g3w[bl][freq_1, freq_2, freq_3](a, b, c, d) -= s * Mw(b1, a, d, n1, n4) * Mw(b2, c, b, n3, n2);
+                        g3w[bl][freq_3, freq_1, freq_2](a, b, c, d) -= s * Mw(b1, a, d, n1, n4) * Mw(b2, c, b, n3, n2);
                     } // m
                   } // n4
                 } // n1
@@ -131,16 +131,16 @@ namespace triqs_ctseg::measures {
               for (int d = 0; d < f3w[bl].target_shape()[3]; d++) {
                 for (int n1 = -n_w_fermionic; n1 < n_w_fermionic; n1++) {
                   for (int n4 = -n_w_fermionic; n4 < n_w_fermionic; n4++) {
-                    for (int m = 0; m < n_w_bosonic; m++) {
+                    for (int m = -n_w_bosonic + 1; m < n_w_bosonic; m++) {
                       int n2 = n1 + m;
                       int n3 = n4 + m;
                       // Please prune this
                       auto freq_1 = mesh_fermionic[n1 + n_w_fermionic];
                       auto freq_2 = mesh_fermionic[n4 + n_w_fermionic];
-                      auto freq_3 = mesh_bosonic[m];
-                      f3w[bl][freq_1, freq_2, freq_3](a, b, c, d) += s * nMw(b1, a, b, n1, n2) * Mw(b2, c, d, n3, n4);
+                      auto freq_3 = mesh_bosonic[m + n_w_bosonic - 1];
+                      f3w[bl][freq_3, freq_1, freq_2](a, b, c, d) += s * nMw(b1, a, b, n1, n2) * Mw(b2, c, d, n3, n4);
                       if (b1 == b2)
-                        f3w[bl][freq_1, freq_2, freq_3](a, b, c, d) -= s * nMw(b1, a, d, n1, n4) * Mw(b2, c, b, n3, n2);
+                        f3w[bl][freq_3, freq_1, freq_2](a, b, c, d) -= s * nMw(b1, a, d, n1, n4) * Mw(b2, c, b, n3, n2);
                     } // m
                   } // n4
                 } // n1
@@ -217,7 +217,7 @@ namespace triqs_ctseg::measures {
 
   std::vector<array<dcomplex, 4>> four_point::compute_Mw(bool is_nMw) {
 
-    int n_w_aux = 2 * n_w_fermionic + n_w_bosonic > 1 ? 2 * n_w_fermionic + n_w_bosonic - 1 : 0;
+    int n_w_aux = 2 * (n_w_fermionic + n_w_bosonic - 1) > 0 ? 2 * (n_w_fermionic + n_w_bosonic - 1) : 0;
     std::vector<array<dcomplex, 4>> result;
     result.resize(wdata.gf_struct.size());
 

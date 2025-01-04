@@ -52,11 +52,11 @@ namespace triqs_ctseg::measures {
     std::vector<array<dcomplex, 4>> compute_Mw(bool is_nMw);
 
     dcomplex Mw(long const &block, int const &i, int const &j, int const &n1, int const &n2) {
-      return Mw_vector[block](i, j, n1 + n_w_fermionic, n2 + n_w_fermionic);
+      return Mw_vector[block](i, j, n1 + n_w_fermionic + n_w_bosonic - 1, n2 + n_w_fermionic + n_w_bosonic - 1);
     }
 
     dcomplex nMw(long const &block, int const &i, int const &j, int const &n1, int const &n2) {
-      return nMw_vector[block](i, j, n1 + n_w_fermionic, n2 + n_w_fermionic);
+      return nMw_vector[block](i, j, n1 + n_w_fermionic + n_w_bosonic - 1, n2 + n_w_fermionic + n_w_bosonic - 1);
     }
 
   };
