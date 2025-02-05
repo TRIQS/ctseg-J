@@ -93,7 +93,7 @@ The static density correlation function is defined as
 
 .. math::
 
-    \langle n^A_i n^B_j \rangle = \frac{1}{\beta} \int_0^{\beta} d \tau \langle n^A_i(\tau) n^A_j(\tau) \rangle. 
+    \langle n^A_i n^B_j \rangle = \frac{1}{\beta} \int_0^{\beta} d \tau \langle n^A_i(\tau) n^B_j(\tau) \rangle.
 
 Here :math:`A, B` represents block names and :math:`i, j` indices within the block. The measurement
 is turned on by setting ``measure_nn_static`` in the ``solve_params`` to ``True``. The result of the 
