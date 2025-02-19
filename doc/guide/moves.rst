@@ -75,6 +75,34 @@ This move is enabled if there is a non-zero hybridization :math:`\Delta(\tau)`.
 
     The origin color and the destination color must be within the same block of the hybridization matrix. 
 
+.. role:: gray
+   :class: gray
+
+:gray:`Double insert segment`
+*********************
+
+.. image:: ../_static/double_insert.png
+    :align: center
+    :width: 80%
+
+:gray:`Randomly choose two different colors. For each color, perform a single insertion.`
+
+:gray:`Double remove segment`
+*********************
+
+.. image:: ../_static/double_remove.png
+    :align: center
+    :width: 80%
+
+:gray:`Randomly choose two different colors. For each color, perform a single removal.`
+
+.. note::
+
+    **Double insert** and **Double remove** are off by default. 
+    When the system's parameters are set in such a way that ergodicity of configurations can hardly be satisfied 
+    (e.g., by applying strong attractive interactions), you can turn them on with setting 
+    ``move_double_insert_segment = True`` and ``move_double_remove_segment = True``. (see :doc:`Solve parameters <./step_by_step>`) 
+
 Insert spin segment
 *******************
 
